@@ -1,4 +1,14 @@
+# Ignorar carpetas
 __pycache__/
-*.pyc
-.env
+data/processed/*
+data/raw/*
+
+# Ignorar notebooks temporales
 *.ipynb_checkpoints
+
+# Ignorar entorno virtual
+venv/
+.env
+
+# Archivos sistema
+.DS_Store
