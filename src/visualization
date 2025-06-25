@@ -1,0 +1,10 @@
+import matplotlib.pyplot as plt
+
+def plot_equity_curve(equity_curve):
+    plt.figure(figsize=(10, 6))
+    plt.plot(equity_curve, label="Equity Curve")
+    plt.title("Strategy Performance")
+    plt.xlabel("Time")
+    plt.ylabel("Equity")
+    plt.legend()
+    plt.show()
