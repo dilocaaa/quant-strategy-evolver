@@ -1,19 +1,10 @@
 from data_loader import clean_data
 import os
-# LISTA DE ARCHIVOS A LIMPIAR
-files = [
-  "TSLA.csv",
-  "MSFT.csv",
-  "AAPL.csv",
-  "NVDA.csv",
-  "QQQ.csv",
-  "VTI.csv",
-  "SPY.csv",
-  "AMZN.csv",
-  "^DJI.csv",
-  "^GSPC.csv",
-  "^NDX.csv",
-]
+
+RAW_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'raw')
+
+# Lista automática de archivos CSV en raw
+files = [f for f in os.listdir(RAW_DIR) if f.endswith('.csv')]
 
 for file in files:
-clean_data(file)
+    clean_data(file)
