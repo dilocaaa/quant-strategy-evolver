@@ -1,29 +1,31 @@
-import yfinance as yf
-import pandas as pd
 import os
+import pandas as pd
 
-# Crear carpeta 'data' si no existe
-if not os.path.exists("data"):
-    os.makedirs("data")
+# Define rutas
+RAW_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'raw')
+PROCESSED_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'processed')
 
-# ----- Configuración -----
-ticker = "BTC-USD"  # Cambia aquí el ticker por el que quieras analizar
-start_date = "2019-01-01"
-end_date = "2024-06-01"
-interval = "1d"  # Puede ser "1d", "1h", "5m", etc.
+# Asegurarse de que la carpeta processed existe
+os.makedirs(PROCESSED_DIR, exist_ok=True)
 
-# ----- Descarga de datos -----
-print(f"Descargando datos de {ticker}...")
-data = yf.download(ticker, start=start_date, end=end_date, interval=interval)
+def clean_data(filename):
+    """
+    Carga un CSV de raw/, limpia los datos y lo guarda en processed/
+    """
+    raw_path = os.path.join(RAW_DIR, filename)
+    processed_path = os.path.join(PROCESSED_DIR, filename)
 
-if not data.empty:
-    print("Primeras filas de los datos:")
-    print(data.head())
+    # Carga el CSV
+    df = pd.read_csv(raw_path, parse_dates=["Date"])
+    df.set_index("Date", inplace=True)
 
-    # Guardar en CSV dentro de la carpeta data
-    filename = f"data/{ticker}.csv"
-    data.to_csv(filename)
-    print(f"Datos guardados en {filename}")
-else:
-    print("No se pudieron descargar datos. Revisa el ticker o la configuración.")
+    # Limpieza básica
+    df = df.dropna()  # Elimina filas con nulos
+
+    # Ordena por fecha por si acaso
+    df = df.sort_index()
+
+    # Guarda en processed
+    df.to_csv(processed_path)
+    print(f"✅ {filename} limpio y guardado en {processed_path}")
 
